@@ -1,8 +1,8 @@
 const main = () => {
     const input = document.querySelector("#input")
     const output = document.querySelector("#output")
-    const listValues = []
-    const Values = {
+    const listOfEquivalencies = []
+    const Equivalencies = {
         1000: "M",
         900: "CM",
         500: "D",
@@ -17,29 +17,37 @@ const main = () => {
         4: "IV",
         1: "I"
     }
-    const changeOutput = value => output.value = value > 3999 ? "NUMBER TOO BIG" : Convertir2(value)
+    // the maximum number currently supported is 3999 because of the lack of characters in extended ascii that represent the roman simbols.
+    const changeOutput = value => output.value = value > 3999 ? "NUMBER TOO BIG" : Convert(value)
     const makeArray = () => {
-        for (var property in Values) {
-            if (Values.hasOwnProperty(property)) {
-                listValues.push(property)
+        // For more efficency the object needs to be converted to an array ( only the decimal value)
+        for (var property in Equivalencies) {
+            if (Equivalencies.hasOwnProperty(property)) {
+                listOfEquivalencies.push(property)
             }
         }
-        listValues.reverse()
+        // It need to be sorted from major to minor 
+        listOfEquivalencies.reverse()
     }
-    const Convertir2 = (value, output = []) => {
-        for (let i = 0; i < listValues.length; i++) {
+    const Convert = (value, output = []) => {
+        for (let i = 0; i < listOfEquivalencies.length; i++) {
+            // Dealing with decimals...
             if (value < 1 && value > 0) {
                 value = 0
-                i = listValues.length
+                // if the value is zero, then the cicle gets broken
+                i = listOfEquivalencies.length
                 continue
             }
-            if (value > listValues[i] - 1) {
-                output.push(Values[listValues[i]])
-                value -= listValues[i]
-                i = listValues.length
+            if (value > listOfEquivalencies[i] - 1) {
+                output.push(Equivalencies[listOfEquivalencies[i]])
+                value -= listOfEquivalencies[i]
+                // if we found wich roman number is equal to the decimal, then we break the cicle
+                i = listOfEquivalencies.length
             }
         }
-        if (value > 0) Convertir2(value, output)
+        // if we still have numbers to convert, then we call the function again, if not, we return the result
+        if (value > 0) Convert(value, output)
+        // converting an array of strings into a big string
         return output.join("")
     }
 
