@@ -1,5 +1,9 @@
-.input-number{
+.input-number {
     font-size: 8rem !important;
     height: 100% !important;
     text-align: right;
+}
+
+.align-left {
+    text-align: left;
 }
